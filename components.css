@@ -372,3 +372,184 @@
     color: var(--color-text-secondary);
     margin-bottom: var(--space-md);
 }
+
+/* ============================================
+   APP NAVIGATION
+   ============================================ */
+
+.app-nav {
+  background-color: var(--color-surface);
+  border-bottom: var(--border-width) var(--border-style) var(--color-border);
+  padding: 0 var(--space-lg);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+.app-nav__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+}
+
+.app-nav__brand {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.app-nav__links {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+.app-nav__link {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding: var(--space-md) 0;
+  border-bottom: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.app-nav__link:hover {
+  color: var(--color-accent);
+}
+
+.app-nav__link--active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+/* Mobile Hamburger Menu */
+.app-nav__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: var(--space-xs);
+}
+
+.app-nav__hamburger-line {
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+}
+
+.app-nav__hamburger--active .app-nav__hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.app-nav__hamburger--active .app-nav__hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.app-nav__hamburger--active .app-nav__hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Mobile Menu Overlay */
+.app-nav__mobile-menu {
+  display: none;
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-surface);
+  padding: var(--space-md);
+  transform: translateX(-100%);
+  transition: transform var(--transition-normal);
+  z-index: var(--z-dropdown);
+}
+
+.app-nav__mobile-menu--active {
+  transform: translateX(0);
+}
+
+.app-nav__mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.app-nav__mobile-link {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding: var(--space-sm);
+  border-left: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.app-nav__mobile-link:hover {
+  color: var(--color-accent);
+  background-color: var(--color-background);
+}
+
+.app-nav__mobile-link--active {
+  color: var(--color-accent);
+  border-left-color: var(--color-accent);
+  background-color: var(--color-accent-light);
+}
+
+
+/* ============================================
+   PAGE CONTAINER
+   ============================================ */
+
+.page-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+
+/* ============================================
+   RESPONSIVE NAVIGATION
+   ============================================ */
+
+@media (max-width: 768px) {
+  .app-nav__links {
+    display: none;
+  }
+  
+  .app-nav__hamburger {
+    display: flex;
+  }
+  
+  .app-nav__mobile-menu {
+    display: block;
+  }
+  
+  .page-container {
+    padding: var(--space-md) var(--space-sm);
+  }
+  
+  .page-title {
+    font-size: var(--text-xl);
+  }
+}
