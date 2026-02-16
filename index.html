@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KodNest Premium Build System - Design System Demo</title>
+  
+  <!-- Design System Stylesheets -->
+  <link rel="stylesheet" href="design-tokens.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  
+  <div class="app-container">
+    
+    <!-- TOP BAR -->
+    <header class="top-bar">
+      <div class="top-bar__left">
+        <div class="top-bar__project-name">KodNest Premium</div>
+      </div>
+      
+      <div class="top-bar__center">
+        <div class="progress">
+          <span>Step 3 / 5</span>
+          <div class="progress__bar">
+            <div class="progress__fill" style="width: 60%;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="top-bar__right">
+        <span class="badge badge--in-progress">In Progress</span>
+      </div>
+    </header>
+    
+    
+    <!-- CONTEXT HEADER -->
+    <section class="context-header">
+      <h1 class="context-header__headline">Design System Overview</h1>
+      <p class="context-header__subtext">
+        A calm, intentional, and coherent design system for serious B2C products. This page demonstrates all components, layouts, and design patterns.
+      </p>
+    </section>
+    
+    
+    <!-- MAIN WORKSPACE -->
+    <main class="workspace">
+      
+      <!-- PRIMARY WORKSPACE (70%) -->
+      <div class="workspace__primary">
+        
+        <!-- Typography Section -->
+        <section style="margin-bottom: var(--space-xl);">
+          <h2>Typography System</h2>
+          <p>Our typography uses a serif font for headings (Crimson Pro) and a clean sans-serif for body text (Inter). All sizes follow an intentional scale with generous spacing.</p>
+          
+          <div style="margin-top: var(--space-md);">
+            <h1>Heading 1 - Large, Confident</h1>
+            <h2>Heading 2 - Clear Hierarchy</h2>
+            <h3>Heading 3 - Section Titles</h3>
+            <h4>Heading 4 - Subsections</h4>
+            <p>Body text is set at 18px with a line-height of 1.6–1.8 for optimal readability. Text blocks are constrained to a maximum width of 720px to maintain comfortable reading length.</p>
+            <p><small>Small text for secondary information and captions</small></p>
+          </div>
+        </section>
+        
+        
+        <!-- Buttons Section -->
+        <section style="margin-bottom: var(--space-xl);">
+          <h2>Buttons</h2>
+          <p>Consistent button styles with primary (solid) and secondary (outlined) variants.</p>
+          
+          <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-md); flex-wrap: wrap;">
+            <button class="btn btn--primary">Primary Button</button>
+            <button class="btn btn--secondary">Secondary Button</button>
+            <button class="btn btn--primary btn--small">Small Primary</button>
+            <button class="btn btn--secondary btn--small">Small Secondary</button>
+            <button class="btn btn--primary" disabled>Disabled</button>
+          </div>
+        </section>
+        
+        
+        <!-- Cards Section -->
+        <section style="margin-bottom: var(--space-xl);">
+          <h2>Cards</h2>
+          <p>Clean cards with subtle borders and balanced padding. No drop shadows.</p>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+            <div class="card">
+              <h3 class="card__title">Card Title</h3>
+              <p class="card__content">Cards use subtle borders and hover states. They maintain visual calm while providing clear structure for content organization.</p>
+            </div>
+            
+            <div class="card">
+              <h3 class="card__title">Another Card</h3>
+              <p class="card__content">Consistent padding and spacing throughout. Every element follows the 8/16/24/40/64px spacing scale.</p>
+            </div>
+          </div>
+        </section>
+        
+        
+        <!-- Form Elements Section -->
+        <section style="margin-bottom: var(--space-xl);">
+          <h2>Form Elements</h2>
+          <p>Clean inputs with clear focus states and no heavy shadows.</p>
+          
+          <div style="max-width: 480px; margin-top: var(--space-md);">
+            <div style="margin-bottom: var(--space-md);">
+              <label for="demo-input" style="display: block; margin-bottom: var(--space-xs); font-weight: var(--weight-medium);">Input Label</label>
+              <input type="text" id="demo-input" class="input" placeholder="Enter text here...">
+            </div>
+            
+            <div style="margin-bottom: var(--space-md);">
+              <label for="demo-textarea" style="display: block; margin-bottom: var(--space-xs); font-weight: var(--weight-medium);">Textarea Label</label>
+              <textarea id="demo-textarea" class="input textarea" placeholder="Enter longer text here..."></textarea>
+            </div>
+          </div>
+        </section>
+        
+        
+        <!-- Badges Section -->
+        <section style="margin-bottom: var(--space-xl);">
+          <h2>Status Badges</h2>
+          <p>Clear status indicators with muted colors.</p>
+          
+          <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-md); flex-wrap: wrap;">
+            <span class="badge badge--not-started">Not Started</span>
+            <span class="badge badge--in-progress">In Progress</span>
+            <span class="badge badge--shipped">Shipped</span>
+            <span class="badge badge--error">Error</span>
+          </div>
+        </section>
+        
+        
+        <!-- Error & Empty States Section -->
+        <section style="margin-bottom: var(--space-xl);">
+          <h2>Error & Empty States</h2>
+          
+          <div class="error-state" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+            <h3 class="error-state__title">Something went wrong</h3>
+            <p class="error-state__message">The build process encountered an error. This typically happens when dependencies are missing or configuration is incomplete.</p>
+            <p class="error-state__action"><strong>How to fix:</strong> Check that all required packages are installed and your configuration file is valid.</p>
+          </div>
+          
+          <div class="empty-state" style="margin-top: var(--space-md);">
+            <h3 class="empty-state__title">No projects yet</h3>
+            <p class="empty-state__message">You haven't created any projects. Start by creating your first project to get started.</p>
+            <button class="btn btn--primary">Create Your First Project</button>
+          </div>
+        </section>
+        
+        
+        <!-- Color System Section -->
+        <section style="margin-bottom: var(--space-xl);">
+          <h2>Color System</h2>
+          <p>Maximum 4 colors used across the entire system. No gradients, no neon.</p>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+            <div>
+              <div style="height: 80px; background-color: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-md);"></div>
+              <p style="margin-top: var(--space-xs); font-size: var(--text-xs);"><strong>Background</strong><br>#F7F6F3</p>
+            </div>
+            
+            <div>
+              <div style="height: 80px; background-color: var(--color-text-primary); border-radius: var(--radius-md);"></div>
+              <p style="margin-top: var(--space-xs); font-size: var(--text-xs);"><strong>Primary Text</strong><br>#111111</p>
+            </div>
+            
+            <div>
+              <div style="height: 80px; background-color: var(--color-accent); border-radius: var(--radius-md);"></div>
+              <p style="margin-top: var(--space-xs); font-size: var(--text-xs);"><strong>Accent</strong><br>#8B0000</p>
+            </div>
+            
+            <div>
+              <div style="height: 80px; background-color: var(--color-success); border-radius: var(--radius-md);"></div>
+              <p style="margin-top: var(--space-xs); font-size: var(--text-xs);"><strong>Success</strong><br>#4A5F4A</p>
+            </div>
+          </div>
+        </section>
+        
+      </div>
+      
+      
+      <!-- SECONDARY PANEL (30%) -->
+      <aside class="workspace__secondary">
+        
+        <div class="panel-section">
+          <h3 class="panel-section__title">Step Explanation</h3>
+          <p class="panel-section__content">
+            This panel provides context and guidance for each step. It includes clear instructions, copyable prompts, and action buttons.
+          </p>
+        </div>
+        
+        <div class="panel-section">
+          <h3 class="panel-section__title">Copyable Prompt</h3>
+          <div class="code-box">
+            <div class="code-box__header">
+              <span class="code-box__title">Prompt</span>
+            </div>
+            <div class="code-box__content">Create a user authentication flow with email and password validation.</div>
+          </div>
+        </div>
+        
+        <div class="panel-section">
+          <h3 class="panel-section__title">Actions</h3>
+          <div class="panel-section__actions">
+            <button class="btn btn--primary btn--small">Copy Prompt</button>
+            <button class="btn btn--secondary btn--small">Build in Lovable</button>
+            <button class="btn btn--secondary btn--small">It Worked ✓</button>
+            <button class="btn btn--secondary btn--small">Report Error</button>
+            <button class="btn btn--secondary btn--small">Add Screenshot</button>
+          </div>
+        </div>
+        
+        <div class="panel-section">
+          <h3 class="panel-section__title">Design Principles</h3>
+          <ul style="font-size: var(--text-sm); color: var(--color-text-secondary); line-height: var(--leading-relaxed);">
+            <li>Calm, not flashy</li>
+            <li>Intentional, not arbitrary</li>
+            <li>Coherent, not fragmented</li>
+            <li>Confident, not apologetic</li>
+          </ul>
+        </div>
+        
+      </aside>
+      
+    </main>
+    
+    
+    <!-- PROOF FOOTER -->
+    <footer class="proof-footer">
+      <h3 class="proof-footer__title">Proof of Completion</h3>
+      <div class="proof-footer__checklist">
+        <div class="checkbox-item">
+          <input type="checkbox" id="proof-ui" class="checkbox" checked>
+          <label for="proof-ui" class="checkbox-item__label">UI Built</label>
+        </div>
+        
+        <div class="checkbox-item">
+          <input type="checkbox" id="proof-logic" class="checkbox" checked>
+          <label for="proof-logic" class="checkbox-item__label">Logic Working</label>
+        </div>
+        
+        <div class="checkbox-item">
+          <input type="checkbox" id="proof-test" class="checkbox">
+          <label for="proof-test" class="checkbox-item__label">Test Passed</label>
+        </div>
+        
+        <div class="checkbox-item">
+          <input type="checkbox" id="proof-deployed" class="checkbox">
+          <label for="proof-deployed" class="checkbox-item__label">Deployed</label>
+        </div>
+      </div>
+    </footer>
+    
+  </div>
+  
+</body>
+</html>

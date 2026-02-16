@@ -1,0 +1,192 @@
+/**
+ * KodNest Premium Build System - Layout System
+ * 
+ * Global layout structure:
+ * [Top Bar] → [Context Header] → [Primary Workspace + Secondary Panel] → [Proof Footer]
+ */
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ============================================
+   TOP BAR
+   ============================================ */
+
+.top-bar {
+    height: var(--topbar-height);
+    background-color: var(--color-surface);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-lg);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.top-bar__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.top-bar__project-name {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.top-bar__center {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.top-bar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+
+/* ============================================
+   CONTEXT HEADER
+   ============================================ */
+
+.context-header {
+    background-color: var(--color-surface);
+    border-bottom: var(--border-width) var(--border-style) var(--color-border);
+    padding: var(--space-xl) var(--space-lg);
+    text-align: left;
+}
+
+.context-header__headline {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.01em;
+}
+
+.context-header__subtext {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    max-width: var(--text-max-width);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+}
+
+
+/* ============================================
+   MAIN WORKSPACE AREA
+   ============================================ */
+
+.workspace {
+    flex: 1;
+    display: flex;
+    max-width: var(--container-max-width);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.workspace__primary {
+    width: var(--workspace-primary-width);
+    padding: var(--space-lg);
+    background-color: var(--color-background);
+}
+
+.workspace__secondary {
+    width: var(--workspace-secondary-width);
+    padding: var(--space-lg);
+    background-color: var(--color-surface);
+    border-left: var(--border-width) var(--border-style) var(--color-border);
+}
+
+
+/* ============================================
+   PROOF FOOTER
+   ============================================ */
+
+.proof-footer {
+    background-color: var(--color-surface);
+    border-top: var(--border-width) var(--border-style) var(--color-border);
+    padding: var(--space-md) var(--space-lg);
+    position: sticky;
+    bottom: 0;
+    z-index: var(--z-sticky);
+}
+
+.proof-footer__title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.proof-footer__checklist {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+
+/* ============================================
+   RESPONSIVE BEHAVIOR
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .workspace {
+        flex-direction: column;
+    }
+
+    .workspace__primary {
+        width: 100%;
+    }
+
+    .workspace__secondary {
+        width: 100%;
+        border-left: none;
+        border-top: var(--border-width) var(--border-style) var(--color-border);
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        padding: 0 var(--space-sm);
+    }
+
+    .context-header {
+        padding: var(--space-lg) var(--space-sm);
+    }
+
+    .context-header__headline {
+        font-size: var(--text-xl);
+    }
+
+    .workspace__primary,
+    .workspace__secondary {
+        padding: var(--space-sm);
+    }
+
+    .proof-footer {
+        padding: var(--space-sm);
+    }
+
+    .proof-footer__checklist {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+}

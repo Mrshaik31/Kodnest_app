@@ -1,0 +1,123 @@
+/**
+ * KodNest Premium Build System - Design Tokens
+ * 
+ * Design Philosophy: Calm, Intentional, Coherent, Confident
+ * No gradients, no glassmorphism, no neon colors, no animation noise
+ */
+
+:root {
+  /* ============================================
+     COLOR SYSTEM (Maximum 4 colors)
+     ============================================ */
+  
+  /* Primary Colors */
+  --color-background: #F7F6F3;        /* Off-white background */
+  --color-text-primary: #111111;      /* Primary text */
+  --color-accent: #8B0000;            /* Deep red accent */
+  
+  /* Semantic Colors */
+  --color-success: #4A5F4A;           /* Muted green */
+  --color-warning: #B8860B;           /* Muted amber */
+  
+  /* Neutral Grays */
+  --color-text-secondary: #666666;    /* Secondary text */
+  --color-border: #D4D2CC;            /* Subtle borders */
+  --color-border-light: #E8E7E3;      /* Lighter borders */
+  --color-surface: #FFFFFF;           /* Card/surface background */
+  
+  /* Interactive States */
+  --color-accent-hover: #6D0000;      /* Darker red on hover */
+  --color-accent-light: #FFF5F5;      /* Light red background */
+  
+  
+  /* ============================================
+     TYPOGRAPHY SYSTEM
+     ============================================ */
+  
+  /* Font Families */
+  --font-serif: 'Crimson Pro', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Font Sizes - Intentional Scale */
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-base: 18px;
+  --text-lg: 24px;
+  --text-xl: 32px;
+  --text-2xl: 48px;
+  --text-3xl: 64px;
+  
+  /* Line Heights */
+  --leading-tight: 1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.8;
+  
+  /* Font Weights */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  
+  /* Max Text Width */
+  --text-max-width: 720px;
+  
+  
+  /* ============================================
+     SPACING SCALE (Consistent, no random values)
+     ============================================ */
+  
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+  
+  
+  /* ============================================
+     LAYOUT DIMENSIONS
+     ============================================ */
+  
+  --workspace-primary-width: 70%;
+  --workspace-secondary-width: 30%;
+  --topbar-height: 64px;
+  --footer-height: auto;
+  --container-max-width: 1440px;
+  
+  
+  /* ============================================
+     INTERACTION & ANIMATION
+     ============================================ */
+  
+  /* Transitions - Calm, predictable */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 200ms ease-in-out;
+  
+  /* Border Radius - Consistent everywhere */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  
+  /* Borders */
+  --border-width: 1px;
+  --border-style: solid;
+  
+  
+  /* ============================================
+     SHADOWS (Minimal, subtle only)
+     ============================================ */
+  
+  --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-none: none;
+  
+  
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+}
