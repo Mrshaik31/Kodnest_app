@@ -553,3 +553,179 @@
     font-size: var(--text-xl);
   }
 }
+
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+.hero-container {
+  min-height: calc(100vh - var(--topbar-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+  background-color: var(--color-background);
+}
+
+.hero-content {
+  max-width: 720px;
+  text-align: center;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+  letter-spacing: -0.02em;
+  line-height: var(--leading-tight);
+}
+
+.hero-subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+  line-height: var(--leading-relaxed);
+}
+
+.btn--large {
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--text-base);
+}
+
+
+/* ============================================
+   FORM COMPONENTS
+   ============================================ */
+
+.settings-form {
+  max-width: 640px;
+  margin-top: var(--space-xl);
+}
+
+.form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.form-help {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: var(--border-width) var(--border-style) var(--color-border);
+}
+
+
+/* ============================================
+   RADIO BUTTONS
+   ============================================ */
+
+.radio-group {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  cursor: pointer;
+  user-select: none;
+}
+
+.radio-input {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: var(--border-width) var(--border-style) var(--color-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.radio-input:hover {
+  border-color: var(--color-accent);
+}
+
+.radio-input:checked {
+  border-color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+.radio-input:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+}
+
+.radio-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+
+/* ============================================
+   SELECT DROPDOWN
+   ============================================ */
+
+select.input {
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=" http://www.w3.org/2000/svg\ viewBox=\0 0 24 24\ fill=\none\ stroke=\%23666666\ stroke-width=\2\ stroke-linecap=\round\ stroke-linejoin=\round\%3e%3cpolyline points=\6 9 12 15 18 9\%3e%3c/polyline%3e%3c/svg%3e');
+ background-repeat: no-repeat;
+ background-position: right var(--space-sm) center;
+ background-size: 20px;
+ padding-right: var(--space-lg);
+}
+
+
+/* ============================================
+ RESPONSIVE HERO
+ ============================================ */
+
+@media (max-width: 768px) {
+ .hero-title {
+ font-size: var(--text-2xl);
+ }
+ 
+ .hero-subtitle {
+ font-size: var(--text-base);
+ }
+ 
+ .form-actions {
+ flex-direction: column;
+ }
+ 
+ .form-actions .btn {
+ width: 100%;
+ }
+ 
+ .radio-group {
+ flex-direction: column;
+ gap: var(--space-sm);
+ }
+}
