@@ -1196,3 +1196,109 @@ select.input {
  margin-right: 4px;
  margin-bottom: 4px;
 }
+
+
+/* ============================================
+   DAILY DIGEST LAYOUT
+   ============================================ */
+
+.digest-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: white;
+  border: 1px solid var(--color-border);
+  padding: var(--space-xl);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  font-family: var(--font-sans);
+}
+
+.digest-header {
+  text-align: center;
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.digest-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.digest-date {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.digest-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.digest-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.digest-item:last-child {
+  border-bottom: none;
+}
+
+.digest-item__content h4 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.digest-item__meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.digest-item__score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+}
+
+.digest-footer {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.digest-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.simulation-badge {
+  display: inline-block;
+  background-color: #EEE;
+  color: #666;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: var(--space-sm);
+}
+
+.digest-empty {
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
