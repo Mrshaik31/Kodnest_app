@@ -20,6 +20,21 @@ let preferences = JSON.parse(localStorage.getItem('jobTrackerPreferences')) || {
 let jobStatus = JSON.parse(localStorage.getItem('jobTrackerStatus')) || {};
 let statusHistory = JSON.parse(localStorage.getItem('jobTrackerStatusHistory')) || [];
 
+// Initialize Test Checklist
+let testChecklist = JSON.parse(localStorage.getItem('jobTrackerTestChecklist')) || {};
+const testItems = [
+  { id: 'pref_persist', label: 'Preferences persist after refresh' },
+  { id: 'match_score', label: 'Match score calculates correctly' },
+  { id: 'match_filter', label: '"Show only matches" toggle works' },
+  { id: 'job_save', label: 'Save job persists after refresh' },
+  { id: 'job_apply', label: 'Apply opens in new tab' },
+  { id: 'status_persist', label: 'Status update persists after refresh' },
+  { id: 'status_filter', label: 'Status filter works correctly' },
+  { id: 'digest_logic', label: 'Digest generates top 10 by score' },
+  { id: 'digest_persist', label: 'Digest persists for the day' },
+  { id: 'console_clean', label: 'No console errors on main pages' }
+];
+
 // ==========================================
 //  PREFERENCE LOGIC
 // ==========================================
@@ -79,6 +94,30 @@ function getJobStatus(id) {
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).replace('-', ' ');
+}
+
+// ==========================================
+//  TEST CHECKLIST LOGIC
+// ==========================================
+
+function updateChecklistItem(id, checked) {
+  testChecklist[id] = checked;
+  localStorage.setItem('jobTrackerTestChecklist', JSON.stringify(testChecklist));
+  renderRoute(); // Re-render to update progress bar
+}
+
+function getChecklistProgress() {
+  const completed = testItems.filter(item => testChecklist[item.id]).length;
+  const total = testItems.length;
+  return { completed, total, percentage: (completed / total) * 100 };
+}
+
+function resetTestStatus() {
+  if (confirm('Are you sure you want to reset all test progress?')) {
+    testChecklist = {};
+    localStorage.removeItem('jobTrackerTestChecklist');
+    renderRoute();
+  }
 }
 
 // ==========================================
@@ -645,10 +684,6 @@ const routes = {
          `;
       }
 
-      // If digest exists, append history inside container? 
-      // Actually per design, maybe below digest container or as part of digest page?
-      // Let's put history below digest container for clean UI.
-
       return `
         <div class="page-container">
           <h1 class="page-title">Daily Digest</h1>
@@ -749,6 +784,85 @@ const routes = {
     `;
     }
   },
+  '/jt/07-test': {
+    title: 'Pre-Flight Checklist',
+    render: () => {
+      const { completed, total, percentage } = getChecklistProgress();
+
+      return `
+        <div class="page-container">
+          <div class="checklist-container">
+            <div class="checklist-header">
+              <h1 class="page-title">Pre-Flight Test Checklist</h1>
+              <p>Tests Passed: ${completed} / ${total}</p>
+              <div class="progress-bar-container">
+                <div class="progress-bar" style="width: ${percentage}%"></div>
+              </div>
+              ${percentage < 100 ?
+          '<p class="checklist-tooltip" style="color: #BA1C1C">Resolve all issues before shipping.</p>' :
+          '<p class="checklist-tooltip" style="color: #047857">All systems go!</p>'}
+            </div>
+            
+            <div class="checklist-items">
+              ${testItems.map(item => `
+                <div class="checklist-item">
+                  <input type="checkbox" class="checklist-checkbox" 
+                    id="${item.id}" 
+                    ${testChecklist[item.id] ? 'checked' : ''} 
+                    onchange="updateChecklistItem('${item.id}', this.checked)">
+                  <div>
+                    <label for="${item.id}" class="checklist-label">${item.label}</label>
+                    <span class="checklist-tooltip">Verify this feature manually.</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div style="margin-top: var(--space-xl); text-align: center;">
+               <button class="btn btn--secondary btn--small" onclick="resetTestStatus()">Reset Test Status</button>
+               <br><br>
+               <a href="#/jt/08-ship" class="btn ${percentage === 100 ? 'btn--primary' : 'btn--secondary'}" ${percentage < 100 ? 'style="opacity: 0.5"' : ''}>
+                 Next: Ship Application
+               </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  },
+  '/jt/08-ship': {
+    title: 'Ready to Ship',
+    render: () => {
+      const { completed, total } = getChecklistProgress();
+
+      if (completed < total) {
+        return `
+          <div class="page-container">
+            <div class="checklist-container checklist-locked">
+              <span class="lock-icon">🔒</span>
+              <h2 class="page-title">Ship Locked</h2>
+              <p>You must verify all ${total} test items before proceeding to the final ship status.</p>
+              <p style="margin-top: var(--space-md)">Current Status: ${completed}/${total} Passed</p>
+              <a href="#/jt/07-test" class="btn btn--secondary" style="margin-top: var(--space-lg)">Return to Checklist</a>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="page-container">
+          <div class="checklist-container ship-success">
+             <h1 class="page-title" style="font-size: 3rem">🚀</h1>
+             <h2 class="page-title">Ready for Takeoff</h2>
+             <p>All systems verified. The Job Notification Tracker is ready for deployment.</p>
+             <div style="margin-top: var(--space-xl)">
+                <p><strong>Final Version: 1.0.0</strong></p>
+             </div>
+          </div>
+        </div>
+      `;
+    }
+  },
   '/proof': {
     title: 'Proof',
     render: () => `
@@ -812,6 +926,7 @@ function toggleStatusFilter(select) {
 // Get current route from hash
 function getCurrentRoute() {
   const hash = window.location.hash.slice(1) || '/';
+  if (hash === '' || hash === '/') return '/';
   return hash;
 }
 
