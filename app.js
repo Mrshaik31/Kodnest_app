@@ -16,6 +16,10 @@ let preferences = JSON.parse(localStorage.getItem('jobTrackerPreferences')) || {
   minMatchScore: 40
 };
 
+// Initialize job status tracking
+let jobStatus = JSON.parse(localStorage.getItem('jobTrackerStatus')) || {};
+let statusHistory = JSON.parse(localStorage.getItem('jobTrackerStatusHistory')) || [];
+
 // ==========================================
 //  PREFERENCE LOGIC
 // ==========================================
@@ -29,6 +33,52 @@ function savePreferences(newPrefs) {
 
 function getPreferences() {
   return preferences;
+}
+
+// ==========================================
+//  JOB STATUS TRACKING
+// ==========================================
+
+function updateJobStatus(id, newStatus) {
+  const previousStatus = jobStatus[id] || 'not-applied';
+
+  // Update status map
+  if (newStatus === 'not-applied') {
+    delete jobStatus[id];
+  } else {
+    jobStatus[id] = newStatus;
+  }
+  localStorage.setItem('jobTrackerStatus', JSON.stringify(jobStatus));
+
+  // Add to history if status changed
+  if (previousStatus !== newStatus) {
+    const job = window.jobsData.find(j => j.id === id);
+    if (job) {
+      statusHistory.unshift({
+        jobId: id,
+        jobTitle: job.title,
+        company: job.company,
+        status: newStatus,
+        date: new Date().toISOString()
+      });
+      // Keep only last 20 updates
+      if (statusHistory.length > 20) statusHistory = statusHistory.slice(0, 20);
+      localStorage.setItem('jobTrackerStatusHistory', JSON.stringify(statusHistory));
+
+      showToast(`Status updated: ${capitalize(newStatus)}`);
+    }
+  }
+
+  // Re-render to update UI (badge colors etc)
+  renderRoute();
+}
+
+function getJobStatus(id) {
+  return jobStatus[id] || 'not-applied';
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).replace('-', ' ');
 }
 
 // ==========================================
@@ -227,6 +277,7 @@ function openJobModal(id) {
 
   const score = calculateMatchScore(job);
   const badgeClass = getScoreBadgeClass(score);
+  const status = getJobStatus(id);
 
   const modalHtml = `
     <div class="modal-backdrop" onclick="closeJobModal()">
@@ -270,6 +321,17 @@ function openJobModal(id) {
               <span class="detail-label">Source</span>
               <span class="detail-value">${job.source}</span>
             </div>
+            <div class="detail-item">
+               <span class="detail-label">Tracking Status</span>
+               <div class="detail-value">
+                  <select class="status-select ${status}" onchange="updateJobStatus(${job.id}, this.value)">
+                    <option value="not-applied" ${status === 'not-applied' ? 'selected' : ''}>Not Applied</option>
+                    <option value="applied" ${status === 'applied' ? 'selected' : ''}>Applied</option>
+                    <option value="rejected" ${status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                    <option value="selected" ${status === 'selected' ? 'selected' : ''}>Selected</option>
+                  </select>
+               </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -309,6 +371,7 @@ function getJobCardHtml(job) {
   const postedText = job.postedDaysAgo === 0 ? 'Today' : `${job.postedDaysAgo} days ago`;
   const score = calculateMatchScore(job);
   const badgeClass = getScoreBadgeClass(score);
+  const status = getJobStatus(job.id);
 
   return `
     <div class="job-card">
@@ -330,12 +393,21 @@ function getJobCardHtml(job) {
       
       <div class="job-card__footer">
         <span class="posted-date">${postedText}</span>
-        <div class="job-card__actions">
-          <button class="btn btn--secondary btn--small" onclick="openJobModal(${job.id})">View</button>
-          <button class="btn ${isSaved ? 'btn--primary' : 'btn--secondary'} btn--small" onclick="${isSaved ? `removeJob(${job.id})` : `saveJob(${job.id})`}">
-            ${isSaved ? 'Saved' : 'Save'}
-          </button>
-          <a href="${job.applyUrl}" target="_blank" class="btn btn--primary btn--small">Apply</a>
+        
+        <div class="job-card__actions-row" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+           <select class="status-select ${status}" onchange="updateJobStatus(${job.id}, this.value)" title="Update Status">
+              <option value="not-applied" ${status === 'not-applied' ? 'selected' : ''}>Not Applied</option>
+              <option value="applied" ${status === 'applied' ? 'selected' : ''}>Applied</option>
+              <option value="rejected" ${status === 'rejected' ? 'selected' : ''}>Rejected</option>
+              <option value="selected" ${status === 'selected' ? 'selected' : ''}>Selected</option>
+           </select>
+        
+           <div class="job-card__actions">
+             <button class="btn btn--secondary btn--small" onclick="openJobModal(${job.id})">View</button>
+             <button class="btn ${isSaved ? 'btn--primary' : 'btn--secondary'} btn--small" onclick="${isSaved ? `removeJob(${job.id})` : `saveJob(${job.id})`}">
+               ${isSaved ? 'Saved' : 'Save'}
+             </button>
+           </div>
         </div>
       </div>
     </div>
@@ -373,20 +445,23 @@ const routes = {
         job.score = calculateMatchScore(job);
       });
 
-      // Check for "Show Matches Only" toggle state (simple global var check or default false)
+      // Check for "Show Matches Only" toggle state
       const showMatchesOnly = window.dashboardShowMatchesOnly || false;
+      const statusFilter = window.dashboardStatusFilter || 'all';
 
       // Filter logic
       if (showMatchesOnly) {
         jobs = jobs.filter(job => job.score >= preferences.minMatchScore);
       }
 
+      // Status Filter
+      if (statusFilter !== 'all') {
+        jobs = jobs.filter(job => getJobStatus(job.id) === statusFilter);
+      }
+
       // Sorting Logic (Default: Latest)
-      // We can implement full sorting later, for now defaults to Latest (ID order basically implies latest for this dataset, or we use postedDaysAgo)
       jobs.sort((a, b) => a.postedDaysAgo - b.postedDaysAgo);
 
-      // Default Sort: Match Score Descending if preferences set, else Latest
-      // But let's stick to Latest as default requested, or Match Score if toggle is On
       if (showMatchesOnly) {
         jobs.sort((a, b) => b.score - a.score);
       }
@@ -411,6 +486,13 @@ const routes = {
              <input type="text" class="input" placeholder="Search role or company..." disabled title="Filtering disabled for now">
           </div>
           <div class="filter-dropdowns">
+            <select class="input input--select" id="status-filter" onchange="toggleStatusFilter(this)">
+               <option value="all" ${statusFilter === 'all' ? 'selected' : ''}>Status: All</option>
+               <option value="not-applied" ${statusFilter === 'not-applied' ? 'selected' : ''}>Not Applied</option>
+               <option value="applied" ${statusFilter === 'applied' ? 'selected' : ''}>Applied</option>
+               <option value="rejected" ${statusFilter === 'rejected' ? 'selected' : ''}>Rejected</option>
+               <option value="selected" ${statusFilter === 'selected' ? 'selected' : ''}>Selected</option>
+            </select>
             <select class="input input--select" disabled><option>Location: All</option></select>
             <select class="input input--select" disabled><option>Mode: All</option></select>
             <select class="input input--select" disabled><option>Exp: All</option></select>
@@ -423,8 +505,8 @@ const routes = {
         <div class="jobs-grid">
           ${jobs.length > 0 ? jobs.map(job => getJobCardHtml(job)).join('') : `
             <div class="empty-state">
-              <h3 class="empty-state__title">No matches found</h3>
-              <p class="empty-state__message">Try adjusting your filters or lowering your match threshold.</p>
+              <h3 class="empty-state__title">No jobs found</h3>
+              <p class="empty-state__message">Try adjusting your filters or status selector.</p>
               <button class="btn btn--secondary" onclick="window.location.hash='#/settings'">Edit Preferences</button>
             </div>
           `}
@@ -482,38 +564,30 @@ const routes = {
 
       const dateStr = getTodayDateString();
       const storageKey = `jobTrackerDigest_${dateStr}`;
-      const digestJobs = JSON.parse(localStorage.getItem(storageKey)); // Don't auto-generate on load unless requested, but here we can check if it exists
+      const digestJobs = JSON.parse(localStorage.getItem(storageKey));
+
+      // Render Logic...
+      let digestHtml = '';
 
       if (!digestJobs) {
-        return `
-          <div class="page-container">
-             <h1 class="page-title">Daily Digest</h1>
+        digestHtml = `
              <div class="empty-state">
                <h3 class="empty-state__title">Ready for your morning brief?</h3>
                <p class="empty-state__message">Generate your personalized list of top 10 job matches for ${dateStr}.</p>
                <button class="btn btn--primary" onclick="handleGenerateDigest()">Generate 9AM Digest (Simulated)</button>
                <div class="simulation-badge">Demo Mode: Manual Trigger</div>
              </div>
-          </div>
         `;
-      }
-
-      if (digestJobs.length === 0) {
-        return `
-          <div class="page-container">
-             <h1 class="page-title">Daily Digest</h1>
+      } else if (digestJobs.length === 0) {
+        digestHtml = `
              <div class="empty-state">
                <h3 class="empty-state__title">No matches found today</h3>
                <p class="empty-state__message">We couldn't find any new jobs matching your specific criteria today. Check back tomorrow!</p>
                <button class="btn btn--secondary" onclick="handleGenerateDigest()">Regenerate</button>
              </div>
-          </div>
         `;
-      }
-
-      // Render Email UI
-      return `
-        <div class="page-container">
+      } else {
+        digestHtml = `
           <div class="digest-container">
             <header class="digest-header">
               <div class="digest-title">Your Daily Job Brief</div>
@@ -549,6 +623,37 @@ const routes = {
                <span class="icon">✉️</span> Create Email Draft
             </button>
           </div>
+        `;
+      }
+
+      // Append Status History if available
+      let historyHtml = '';
+      if (statusHistory.length > 0) {
+        historyHtml = `
+           <div class="status-history">
+              <h3 class="status-history-title">Recent Status Updates</h3>
+              ${statusHistory.map(item => `
+                 <div class="history-item">
+                    <span>${item.jobTitle} @ ${item.company}</span>
+                    <div style="text-align: right">
+                       <span class="history-status ${item.status}">${capitalize(item.status)}</span>
+                       <br><span style="font-size: 10px; opacity: 0.7">${new Date(item.date).toLocaleDateString()}</span>
+                    </div>
+                 </div>
+              `).join('')}
+           </div>
+         `;
+      }
+
+      // If digest exists, append history inside container? 
+      // Actually per design, maybe below digest container or as part of digest page?
+      // Let's put history below digest container for clean UI.
+
+      return `
+        <div class="page-container">
+          <h1 class="page-title">Daily Digest</h1>
+          ${digestHtml}
+          ${historyHtml && digestJobs ? '<div style="max-width: 600px; margin: 0 auto;">' + historyHtml + '</div>' : ''}
         </div>
       `;
     }
@@ -690,10 +795,17 @@ function handleGenerateDigest() {
   renderRoute(); // Re-render to show the digest
 }
 
-// Global toggle handler (needs to be global to work in onclick)
+// Global toggle handler
 window.dashboardShowMatchesOnly = false;
 function toggleMatchFilter(checkbox) {
   window.dashboardShowMatchesOnly = checkbox.checked;
+  renderRoute();
+}
+
+// Global status filter handler
+window.dashboardStatusFilter = 'all';
+function toggleStatusFilter(select) {
+  window.dashboardStatusFilter = select.value;
   renderRoute();
 }
 
